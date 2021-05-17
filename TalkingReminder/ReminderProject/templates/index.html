@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Talking Reminder</title>
+	<!-- Mobile Specific Metas -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<!-- Font-->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/opensans-font.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static '/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css' %}">
+	<!-- Main Style Css -->
+    <link rel="stylesheet" href="{% static '/css/style.css' %}"/>
+</head>
+<body>
+	<div class="page-content">
+		<div class="form-v1-content">
+			<div class="wizard-form">
+		        <div class="form-register">
+		        	<div id="form-total">
+						<!-- SECTION 3 -->
+			            <h2>
+			            	<span class="step-text" style="color: white;">What you have to do?</span>
+			            </h2>
+			            <section>
+			                <div class="inner">
+								{% if reminder %}
+			                	<div class="wizard-header">
+									<h3 class="heading">What you have to do?</h3>
+									<p>hey! here is your to do list.</p>
+								</div>
+								<div class="form-row">
+									
+			                		<div class="form-holder form-holder-2">
+										{% for r in reminder %}
+			                			
+										<label class="plan-icon plan-1-label" for="plan-1" style="background: white;">
+		                					<p class="text-left" style="font-size: medium; font-weight: bold; color: darkcyan;">{{r.time}}</p>
+			                			</label>
+			                			<div class="plan-total" style="margin-bottom: 13px;">
+											<span class="plan-title" style="color: darkcyan;">{{r.title}}</span><br>
+											<span class="text-left" style="font-size: small; color:darkgoldenrod; font-weight: bold;">{{r.date}}</span>
+											<div class="button-container">
+											<form action="{% url 'deleteReminder' %}" method="post">
+												{% csrf_token %}
+												<input type="hidden" name="delrem" id="delrem" value="{{r}}">
+												<button type="submit" style="background-color: white; border: none; color: #fd0124; cursor: pointer;" class="plan-text" id="delete" name="delete">Delete</button>
+											</form>
+											</div>
+										</div>
+										{% endfor %}	
+									</div>
+									
+								</div>
+								{% else %}
+								<div class="wizard-header">
+									<h3 class="heading">What you have to do?</h3>
+									<p>hey! here is your to do list.</p>
+								</div>
+								<div class="wizard-header">
+									<p style="color: crimson;">Please add your reminder.</p>
+								</div>
+								{% endif %}
+							</div>
+			            </section>
+		        		<!-- SECTION 1 -->
+			            <h2>
+			            	<span class="step-text" style="color: white;">New Reminder?</span>
+			            </h2>
+			            <section>
+			                <div class="inner">
+								<form action="{% url 'addReminder' %}" method="post">
+								{% csrf_token %}
+			                	<div class="wizard-header">
+									<h3 class="heading">New Reminder?</h3>
+									<p>Tell me what I remind you? </p>
+								</div>
+								
+								<div class="form-row">
+									<div class="form-holder form-holder-2">
+										<fieldset>
+											<legend>What I call you?</legend>
+											<input type="text" name="your_email" id="your_email" class="form-control" value="Dear" required>
+										</fieldset>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-holder form-holder-2">
+										<fieldset>
+											<legend>Title</legend>
+											<input type="text" class="form-control" id="phone" name="phone" placeholder="Wake up" required>
+										</fieldset>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-holder">
+										<fieldset>
+											<legend>When?</legend>
+											<input type="date" class="form-control" id="first-name" name="first-name" onchange="myFunction1()" required>
+										</fieldset>
+									</div>
+									<div class="form-holder">
+										<fieldset>
+											<legend>At?</legend>
+											<input type="time" class="form-control" id="last-name" name="last-name" onchange="myFunction()" required>
+										</fieldset>
+									</div>
+								</div>
+								<!--div class="form-row">
+									<div class="form-holder form-holder-2">
+										<select name="repeat" id="repeat">
+											<option value="Don't Repeat"selected>Don't Repeat</option>
+											<option value="Every Hour">Every Hour</option>
+											<option value="Every Day">Every Day</option>
+											<option value="Every Week">Every Week</option>
+											<option value="Every Month">Every Month</option>
+											<option value="Every Year">Every Year</option>
+										</select>
+									</div>
+								</div-->
+								<div class="form-row">
+									<div class="form-holder form-holder-2">
+										<button type="submit" class="button" id="saveAlarm" name="saveAlarm">Save</button>
+										<button type="reset" class="button" id="saveAlarm" name="saveAlarm">Reset</button>
+									</div>
+								</div>
+							</form>
+							</div>
+			            </section>
+						<!-- SECTION 2 -->
+			            <h2>
+			            	<span class="step-text" style="color: white;">Choose Voice</span>
+			            </h2>
+			            <section>
+			                <div class="inner">
+			                	<div class="wizard-header">
+									<h3 class="heading">Choose Voice</h3>
+									<p>Hey! I want to be your voice.</p>
+								</div>
+								<div>
+									<form action="{% url 'chooseVoice' %}" method="post">
+										{% csrf_token %}
+										<div class="form-row">
+											<div>
+												<input type="radio" class="form-control" name="gender" id="bank-1" value="Male" checked> Male
+												<br>
+												<input type="radio" class="form-control" name="gender" id="bank-2" value="Female"> Female
+											</div>
+										</div>
+										<div class="form-row"></div>
+											<div class="form-holder form-holder-2">
+												<button type="submit" class="button" id="saveVoice" name="saveVoice">Save</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+			            </section>
+		        	</div>
+		        </div>
+			</div>
+		</div>
+	</div>
+	<script src="{% static '/js/jquery-3.3.1.min.js' %}"></script>
+	<script src="{% static '/js/jquery.steps.js' %}"></script>
+	<script src="{% static '/js/main.js' %}"></script>
+	<script type="text/javascript">
+		var todayDate='';
+		var todayTime='';
+		var currentDate='';
+		var currentTime='';
+		$("document").ready(function(){
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0 so need to add 1 to make it 1!
+			var yyyy = today.getFullYear();
+			if(mm<10){
+				todayDate=yyyy+'-0'+mm+'-0'+dd;
+			}
+			else{
+				todayDate=yyyy+'-'+mm+'-'+dd;
+			}
+			document.getElementById("first-name").setAttribute("min", todayDate);
+			
+			var time = new Date();
+			var hour = (time.getHours()<10?'0':'')+time.getHours();
+			var minute = (time.getMinutes()<10?'0':'')+time.getMinutes();
+			
+			todayTime = hour+':'+minute;
+			currentTime=todayTime
+		})
+		function myFunction() {
+			currentTime = document.getElementById("last-name").value;
+			if (todayDate === currentDate) {
+				var n = currentTime.localeCompare(todayTime);
+				if (n == -1 || n == 0) {
+					alert("add alarm for future");
+				}
+			}
+		}
+		function myFunction1() {
+			currentDate = document.getElementById("first-name").value;
+			if (todayDate === currentDate) {
+				var n = currentTime.localeCompare(todayTime);
+				if (n == -1) {
+					alert("add alarm for future");
+				}
+			}
+		}
+	</script>
+</body>
+</html>
